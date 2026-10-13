@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f2e8">
+  <meta name="description" content="Upptäck ZINA UF – handgjorda pärlhalsband med färg, personlighet och lekfull energi.">
+  <title>ZINA UF — Beads with personality</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="announcement">SMÅ PÄRLOR. STOR PERSONLIGHET. <span>♡</span> HANDGJORDA AV ZINA UF</div>
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="ZINA startsida">ZINA<span>®</span></a>
+    <nav aria-label="Huvudmeny">
+      <a href="#shop">Shop</a><a href="#story">Vår story</a><a href="#faq">FAQ</a>
+    </nav>
+    <button class="cart-trigger" id="open-cart" aria-label="Öppna varukorg">Varukorg <span id="cart-count">0</span> <span class="bag-icon">↗</span></button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="sparkle">✳</span> MADE BY HAND, MADE TO BE YOU</p>
+        <h1>Beads with<br><span>personality.</span></h1>
+        <p class="hero-text">Färg, form och lite extra attityd. Upptäck handgjorda pärlhalsband skapade för att göra varje outfit lite mer <em>du</em>.</p>
+        <a class="button button-dark" href="#shop">Hitta din favorit <span>↘</span></a>
+        <div class="hero-note"><span class="mini-hearts">♥ ♥ ♥</span> Designade och monterade med kärlek i Sverige</div>
+      </div>
+      <div class="hero-art" aria-label="Illustration av färgglada pärlhalsband">
+        <div class="sunburst">ZINA<br>ENERGY!</div>
+        <div class="poster-label label-one">YOUR<br>NEW FAVE</div>
+        <div class="necklace necklace-one"></div>
+        <div class="necklace necklace-two"></div>
+        <div class="necklace necklace-three"></div>
+        <div class="poster-label label-two">GOOD<br>VIBES ONLY ✿</div>
+        <span class="floating-star star-one">✳</span><span class="floating-star star-two">✦</span>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div>COLOR OUTSIDE THE LINES ✳ BE YOUR OWN MOOD ✳ MADE WITH LOVE ✳ COLOR OUTSIDE THE LINES ✳ BE YOUR OWN MOOD ✳</div></div>
+
+    <section class="shop-section section-wrap" id="shop">
+      <div class="section-heading">
+        <div><p class="eyebrow">THE ZINA EDIT</p><h2>Pick your <span>personality.</span></h2></div>
+        <p>Alla halsband har sin egen vibe.<br>Vilken är din?</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrera produkter">
+        <button class="filter active" data-filter="all">Alla pärlor</button>
+        <button class="filter" data-filter="color">Color pop</button>
+        <button class="filter" data-filter="soft">Soft & sweet</button>
+        <button class="filter" data-filter="bold">Bold energy</button>
+      </div>
+      <div class="product-grid" id="product-grid"></div>
+    </section>
+
+    <section class="manifesto" id="story">
+      <div class="manifesto-sticker">BE<br>YOU<span>!</span></div>
+      <p class="eyebrow">A LITTLE ABOUT US</p>
+      <h2>Inte massproducerat.<br><span>Bara väldigt mycket du.</span></h2>
+      <p class="manifesto-text">ZINA UF skapades ur kärleken till accessoarer som känns personliga. Vi kombinerar färgglada akrylpärlor och genomtänkta detaljer för att skapa halsband med en egen karaktär. Varje halsband sätts ihop för hand av oss.</p>
+      <a href="#shop" class="text-link">Hitta ditt halsband <span>↗</span></a>
+    </section>
+
+    <section class="values section-wrap">
+      <div><span class="value-icon">✳</span><h3>Handgjort av oss</h3><p>Varje halsband monteras för hand med omtanke om detaljerna.</p></div>
+      <div><span class="value-icon">♡</span><h3>Din egen vibe</h3><p>Färger och pärlor som låter din personlighet ta plats.</p></div>
+      <div><span class="value-icon">☻</span><h3>UF med ambition</h3><p>Ett ungt företag som bygger, lär och skapar på riktigt.</p></div>
+    </section>
+
+    <section class="faq-section section-wrap" id="faq">
+      <p class="eyebrow">GOOD TO KNOW</p><h2>Quick <span>questions.</span></h2>
+      <details><summary>Hur beställer jag?</summary><p>Lägg dina favoriter i varukorgen och gå vidare till beställningen. Där fyller du i dina kontaktuppgifter så att vi kan återkomma och bekräfta ordern.</p></details>
+      <details><summary>Är halsbanden handgjorda?</summary><p>Ja! ZINA UF monterar halsbanden själva av akrylpärlor och utvalda smyckesdelar.</p></details>
+      <details><summary>Hur fungerar betalning och leverans?</summary><p>Vi bekräftar beställning, betalningssätt och leveransalternativ personligen innan ordern slutförs.</p></details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="wordmark" href="#top">ZINA<span>®</span></a>
+    <p>Made with love & a little bit of sparkle.</p>
+    <p class="footer-small">© <span id="year"></span> ZINA UF · Ung Företagsamhet</p>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Varukorg" aria-hidden="true">
+    <div class="drawer-head"><div><p class="eyebrow">YOUR GOODIES</p><h2>Varukorg <span>♡</span></h2></div><button class="icon-button" id="close-cart" aria-label="Stäng varukorg">✕</button></div>
+    <div id="cart-items" class="cart-items"><p class="empty-cart">Din varukorg är tom än så länge. Dags att hitta en favorit? ✳</p></div>
+    <div class="cart-bottom"><div class="total-line"><span>Summa</span><strong id="cart-total">0 kr</strong></div><p class="cart-disclaimer">Frakt och betalning bekräftas efter att vi mottagit din beställning.</p><button class="button button-dark checkout-button" id="checkout-button">Till beställning <span>↗</span></button></div>
+  </aside>
+
+  <dialog id="checkout-dialog" class="checkout-dialog">
+    <form id="checkout-form">
+      <div class="dialog-head"><div><p class="eyebrow">ALMOST YOURS</p><h2>Skicka en <span>beställning.</span></h2></div><button type="button" class="icon-button" id="close-checkout" aria-label="Stäng">✕</button></div>
+      <p class="dialog-intro">Fyll i dina uppgifter så sammanställer vi din order. Vi kontaktar dig för att bekräfta betalning och leverans.</p>
+      <label for="customer-name">Namn</label><input id="customer-name" name="name" required autocomplete="name" placeholder="Ditt namn">
+      <label for="customer-email">E-post</label><input id="customer-email" name="email" type="email" required autocomplete="email" placeholder="namn@exempel.se">
+      <label for="customer-phone">Telefon (valfritt)</label><input id="customer-phone" name="phone" type="tel" autocomplete="tel" placeholder="07X XXX XX XX">
+      <label for="customer-message">Meddelande (valfritt)</label><textarea id="customer-message" name="message" rows="3" placeholder="Frågor eller önskemål?"></textarea>
+      <div class="order-summary" id="order-summary"></div>
+      <button class="button button-dark checkout-button" type="submit">Skapa orderförfrågan <span>↗</span></button>
+      <p class="form-note">Detta är en orderförfrågan – inget betalas på webbplatsen.</p>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
