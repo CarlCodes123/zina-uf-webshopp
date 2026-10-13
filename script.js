@@ -1,8 +1,9 @@
 // ZINA UF storefront demo. Update the product names and prices below before publishing.
 const products = [
-  {id:1,name:"OLIVIA",desc:"Enfärgat olivgrönt halsband · pärlor ca 16 mm",price:null,category:"color",bg:"green",bead:"#59603a",image:"assets/olivia-olivgron.jpg",tag:"OLIVGRÖN"},
-  {id:2,name:"VALENTINA",desc:"Enfärgat vinrött halsband · pärlor ca 16 mm",price:null,category:"bold",bg:"pink",bead:"#711329",image:"assets/valentina-vinrod.jpg",tag:"VINRÖD"},
-  {id:3,name:"NOA",desc:"Enfärgat mörkblått halsband · pärlor ca 16 mm",price:null,category:"color",bg:"blue",bead:"#142947",image:"assets/noa-morkbla.jpg",tag:"MÖRKBLÅ"}
+  {id:1,name:"Olivgrön",desc:"Enfärgat olivgrönt halsband · pärlor ca 16 mm",price:null,category:"color",bg:"green",bead:"#59603a",image:"assets/olivia-olivgron.jpg",tag:"OLIVGRÖN"},
+  {id:2,name:"Vinröd",desc:"Enfärgat vinrött halsband · pärlor ca 16 mm",price:null,category:"bold",bg:"pink",bead:"#711329",image:"assets/valentina-vinrod.jpg",tag:"VINRÖD"},
+  {id:3,name:"Mörkbrun",desc:"Enfärgat mörkbrunt halsband · pärlor ca 16 mm",price:null,category:"bold",bg:"brown",bead:"#4b2b1d",image:"assets/halsband-morkbrun.jpg",tag:"MÖRKBRUN"},
+  {id:4,name:"Svart",desc:"Enfärgat svart halsband · pärlor ca 16 mm",price:null,category:"bold",bg:"black",bead:"#151515",image:"assets/halsband-svart.jpg",tag:"SVART"}
 ];
 const cart = new Map();
 const $ = s => document.querySelector(s);
