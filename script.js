@@ -1,4 +1,4 @@
-// ZINA UF storefront demo. Update the product names and prices below before publishing.
+// ZINA UF storefront. Order requests are sent through FormSubmit; activate the recipient email before launch.
 const products = [
   {id:1,name:"Olivgrön",desc:"Enfärgat olivgrönt halsband · pärlor ca 16 mm",price:249,category:"color",bg:"green",bead:"#59603a",image:"assets/olivia-olivgron.jpg",tag:"OLIVGRÖN"},
   {id:2,name:"Vinröd",desc:"Enfärgat vinrött halsband · pärlor ca 16 mm",price:249,category:"bold",bg:"pink",bead:"#711329",image:"assets/valentina-vinrod.jpg",tag:"VINRÖD"},
@@ -6,6 +6,9 @@ const products = [
   {id:4,name:"Svart",desc:"Enfärgat svart halsband · pärlor ca 16 mm",price:249,category:"bold",bg:"black",bead:"#151515",image:"assets/halsband-svart.jpg",tag:"SVART"}
 ];
 const cart = new Map();
+const SHIPPING_FEE = 49;
+const ORDER_EMAIL = "zina.uf2026@gmail.com";
+const SWISH_NUMBER = "1237073257";
 const $ = s => document.querySelector(s);
 const money = n => `${n.toLocaleString("sv-SE")} kr`;
 const grid = $("#product-grid");
@@ -37,14 +40,17 @@ function addToCart(id){
 function renderCart(){
   const count=[...cart.values()].reduce((a,b)=>a+b,0);
   const hasUnknownPrice=products.some(p=>cart.has(p.id)&&p.price==null);
-  const total=products.reduce((sum,p)=>sum+(p.price||0)*(cart.get(p.id)||0),0);
+  const subtotal=products.reduce((sum,p)=>sum+(p.price||0)*(cart.get(p.id)||0),0);
+  const total=subtotal+(count?SHIPPING_FEE:0);
   $("#cart-count").textContent=count;$("#cart-total").textContent=hasUnknownPrice?"Pris bekräftas senare":money(total);
   if(!count){cartItems.innerHTML='<p class="empty-cart">Din varukorg är tom än så länge. Dags att hitta en favorit? ✳</p>';}
   else cartItems.innerHTML=products.filter(p=>cart.has(p.id)).map(p=>`
     <div class="cart-row"><div class="cart-thumb" style="background:var(--${p.bg})">✳</div>
     <div><h3>${p.name}</h3><p>${cart.get(p.id)} × ${p.price == null ? "Pris kommer" : money(p.price)}</p><button class="remove-item" data-remove="${p.id}">Ta bort en</button></div>
     <strong>${p.price == null ? "Pris kommer" : money(p.price*cart.get(p.id))}</strong></div>`).join("");
-  $("#order-summary").innerHTML=products.filter(p=>cart.has(p.id)).map(p=>`${p.name} × ${cart.get(p.id)} — ${p.price == null ? "Pris bekräftas senare" : money(p.price*cart.get(p.id))}`).join("<br>")+`<hr><strong>${hasUnknownPrice ? "Slutpris bekräftas av ZINA UF" : "Produktsumma: "+money(total)}</strong>`;
+  const subtotal=products.reduce((sum,p)=>sum+(p.price||0)*(cart.get(p.id)||0),0);
+  const total=subtotal+(count?SHIPPING_FEE:0);
+  $("#order-summary").innerHTML=products.filter(p=>cart.has(p.id)).map(p=>`${p.name} × ${cart.get(p.id)} — ${money(p.price*cart.get(p.id))}`).join("<br>")+`<hr>Produktsumma: ${money(subtotal)}<br>Frakt: ${money(SHIPPING_FEE)}<br><strong>Totalt: ${money(total)}</strong><p>Betalning sker via Swish efter att ZINA UF bekräftat beställningen.</p>`;
   $("#checkout-button").disabled=!count;$("#checkout-button").style.opacity=count?1:.45;
 }
 function openCart(){drawer.classList.add("open");overlay.classList.add("visible");drawer.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}
@@ -55,24 +61,86 @@ cartItems.addEventListener("click",e=>{const b=e.target.closest("[data-remove]")
 $("#open-cart").addEventListener("click",openCart);$("#close-cart").addEventListener("click",closeCart);overlay.addEventListener("click",closeCart);
 $("#checkout-button").addEventListener("click",()=>{if(cart.size){closeCart();$("#checkout-dialog").showModal();}});
 $("#close-checkout").addEventListener("click",()=>$("#checkout-dialog").close());
-$("#checkout-form").addEventListener("submit",e=>{
+$("#checkout-form").addEventListener("submit",async e=>{
   e.preventDefault();
-  const data=new FormData(e.currentTarget);
-  const lines=products.filter(p=>cart.has(p.id)).map(p=>`- ${p.name} x ${cart.get(p.id)}: ${p.price == null ? "Pris bekräftas senare" : money(p.price*cart.get(p.id))}`);
-  const hasUnknownPrice=products.some(p=>cart.has(p.id)&&p.price==null);
-  const total=products.reduce((sum,p)=>sum+(p.price||0)*(cart.get(p.id)||0),0);
-  const order=`ORDERFÖRFRÅGAN – ZINA UF\n\nNamn: ${data.get("name")}\nE-post: ${data.get("email")}\nTelefon: ${data.get("phone")||"Ej angivet"}\n\nProdukter:\n${lines.join("\n")}\n\nProduktsumma: ${hasUnknownPrice ? "Bekräftas senare" : money(total)}\nMeddelande: ${data.get("message")||"Inget"}\n\nVänligen bekräfta betalning och leverans.`;
-  // Replace this address with ZINA UF's real order email before launch.
-  const orderEmail="BYT-TILL-ER-EPOST@EXEMPEL.SE";
-  const subject=encodeURIComponent("Beställningsförfrågan – ZINA UF");
-  const body=encodeURIComponent(order);
-  if(orderEmail.includes("BYT-TILL-ER-EPOST")){
-    const blob=new Blob([order],{type:"text/plain;charset=utf-8"});
-    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="zina-bestallningsforfragan.txt";a.click();URL.revokeObjectURL(url);
-    $("#checkout-dialog").close();showToast("Ordertexten laddades ner. Lägg in er ordermejl i script.js!");
-  }else{
-    window.location.href=`mailto:${orderEmail}?subject=${subject}&body=${body}`;
-    $("#checkout-dialog").close();showToast("Din e-postapp öppnas med orderförfrågan.");
+  if(!cart.size){showToast("Varukorgen är tom.");return;}
+  const form=e.currentTarget;
+  const submitButton=form.querySelector('button[type="submit"]');
+  const data=new FormData(form);
+  const items=products.filter(p=>cart.has(p.id)).map(p=>({name:p.name,quantity:cart.get(p.id),unitPrice:p.price,lineTotal:p.price*cart.get(p.id)}));
+  const subtotal=items.reduce((sum,p)=>sum+p.lineTotal,0);
+  const total=subtotal+SHIPPING_FEE;
+  const orderId="ZINA-"+Date.now().toString().slice(-8);
+  const itemLines=items.map(p=>`- ${p.name} x ${p.quantity}: ${money(p.lineTotal)}`).join("\\n");
+  const message=[
+    "NY BESTÄLLNING – ZINA UF",
+    "Ordernummer: "+orderId,
+    "",
+    "Kund: "+data.get("name"),
+    "E-post: "+data.get("email"),
+    "Telefon: "+data.get("phone"),
+    "Adress: "+data.get("address"),
+    "Postnummer och ort: "+data.get("postcode")+" "+data.get("city"),
+    "",
+    "Produkter:",
+    itemLines,
+    "",
+    "Produktsumma: "+money(subtotal),
+    "Frakt: "+money(SHIPPING_FEE),
+    "TOTALT: "+money(total),
+    "Betalning: Swish efter bekräftelse",
+    "Swishnummer: "+SWISH_NUMBER,
+    "Meddelande: "+(data.get("message")||"Inget"),
+    "",
+    "Kontrollera lager och adress och bekräfta sedan beställningen med kunden."
+  ].join("\\n");
+  submitButton.disabled=true;
+  submitButton.textContent="Skickar beställning…";
+  try{
+    const response=await fetch("https://formsubmit.co/ajax/"+ORDER_EMAIL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify({
+        _subject:"ZINA UF – ny beställning "+orderId,
+        _template:"table",
+        _captcha:"true",
+        _replyto:data.get("email"),
+        order_number:orderId,
+        customer_name:data.get("name"),
+        customer_email:data.get("email"),
+        customer_phone:data.get("phone"),
+        shipping_address:data.get("address")+", "+data.get("postcode")+" "+data.get("city"),
+        products:itemLines,
+        product_subtotal:money(subtotal),
+        shipping:money(SHIPPING_FEE),
+        total:money(total),
+        payment:"Swish efter bekräftelse",
+        swish_number:SWISH_NUMBER,
+        customer_message:data.get("message")||"Inget",
+        order_details:message
+      })
+    });
+    const result=await response.json();
+    if(!response.ok||result.success!== "true" && result.success!==true){
+      throw new Error("Formulärtjänsten bekräftade inte mottagandet.");
+    }
+    $("#checkout-dialog").close();
+    form.reset();
+    cart.clear();
+    renderCart();
+    const confirmation=document.createElement("dialog");
+    confirmation.className="checkout-dialog";
+    confirmation.innerHTML='<div class="dialog-head"><div><p class="eyebrow">TACK FÖR DIN BESTÄLLNING</p><h2>Orderförfrågan <span>skickad!</span></h2></div><button type="button" class="icon-button" aria-label="Stäng">✕</button></div><p class="dialog-intro">Ditt ordernummer är <strong>'+orderId+'</strong>. ZINA UF behöver bekräfta beställningen innan du betalar.</p><div class="order-summary"><strong>Betalning via Swish</strong><br>Swishnummer: '+SWISH_NUMBER+'<br>Att betala inklusive frakt: '+money(total)+'<br><br><strong>Vänta med att betala</strong> tills ZINA UF har bekräftat att beställningen kan levereras och skickat betalningsinstruktioner.</div><button class="button button-dark checkout-button" type="button">Klart</button>';
+    document.body.appendChild(confirmation);
+    confirmation.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{confirmation.close();confirmation.remove();}));
+    confirmation.addEventListener("close",()=>confirmation.remove());
+    confirmation.showModal();
+  }catch(error){
+    console.error(error);
+    showToast("Beställningen kunde inte skickas. Försök igen eller kontakta zina.uf2026@gmail.com.");
+  }finally{
+    submitButton.disabled=false;
+    submitButton.innerHTML='Skicka beställning <span>↗</span>';
   }
 });
 $("#year").textContent=new Date().getFullYear();
