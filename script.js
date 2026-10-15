@@ -48,8 +48,6 @@ function renderCart(){
     <div class="cart-row"><div class="cart-thumb" style="background:var(--${p.bg})">✳</div>
     <div><h3>${p.name}</h3><p>${cart.get(p.id)} × ${p.price == null ? "Pris kommer" : money(p.price)}</p><button class="remove-item" data-remove="${p.id}">Ta bort en</button></div>
     <strong>${p.price == null ? "Pris kommer" : money(p.price*cart.get(p.id))}</strong></div>`).join("");
-  const subtotal=products.reduce((sum,p)=>sum+(p.price||0)*(cart.get(p.id)||0),0);
-  const total=subtotal+(count?SHIPPING_FEE:0);
   $("#order-summary").innerHTML=products.filter(p=>cart.has(p.id)).map(p=>`${p.name} × ${cart.get(p.id)} — ${money(p.price*cart.get(p.id))}`).join("<br>")+`<hr>Produktsumma: ${money(subtotal)}<br>Frakt: ${money(SHIPPING_FEE)}<br><strong>Totalt: ${money(total)}</strong><p>Betalning sker via Swish efter att ZINA UF bekräftat beställningen.</p>`;
   $("#checkout-button").disabled=!count;$("#checkout-button").style.opacity=count?1:.45;
 }
@@ -71,7 +69,7 @@ $("#checkout-form").addEventListener("submit",async e=>{
   const subtotal=items.reduce((sum,p)=>sum+p.lineTotal,0);
   const total=subtotal+SHIPPING_FEE;
   const orderId="ZINA-"+Date.now().toString().slice(-8);
-  const itemLines=items.map(p=>`- ${p.name} x ${p.quantity}: ${money(p.lineTotal)}`).join("\\n");
+  const itemLines=items.map(p=>`- ${p.name} x ${p.quantity}: ${money(p.lineTotal)}`).join("\n");
   const message=[
     "NY BESTÄLLNING – ZINA UF",
     "Ordernummer: "+orderId,
